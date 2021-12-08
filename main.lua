@@ -101,7 +101,6 @@ SpellQueueTest.InitEvent:SetScript("OnEvent", function(_, event, arg)
 			SpellQueueTest.EventFrame:UnregisterEvent("PLAYER_TARGET_CHANGED")
 		end
 		SpellQueueTest.SlideBar:SetValue(GetCVar("SpellQueueWindow"))
-		SpellQueueTest.DragButton:Hide()
 	elseif event == "PLAYER_LOGOUT" then
 		if _G[sqtset] then _G[sqtset] = cfg	end
 	end
