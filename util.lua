@@ -60,7 +60,6 @@ end
 function SpellQueueTest:LogColor(val)
 	local refmargin = 0.020
 	local ref = 1.500 + refmargin
-	--local ref = 1.5 + (GetCVar("SpellQueueWindow") / 1000)
 	local str
 	local valstr = string.format("%.3f", val)
 	val = tonumber(valstr)

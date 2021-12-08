@@ -117,7 +117,7 @@ SpellQueueTest.EventFrame:SetScript("OnEvent", function(_, event)
 		if not destGUID then return end
 
 		if srcGUID == PGUID and combatEvent == "SPELL_CAST_SUCCESS" then
-			if spellID == 585 then
+			--if spellID == 585 then
 				local cur = debugprofilestop() / 1000
 				local avg = SpellQueueTest.avg
 
@@ -134,7 +134,7 @@ SpellQueueTest.EventFrame:SetScript("OnEvent", function(_, event)
 				end
 				pre = cur
 				avg.cnt = avg.cnt + 1
-			end
+			--end
 		end
 	end
 end)
