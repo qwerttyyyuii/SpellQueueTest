@@ -102,7 +102,7 @@ SpellQueueTest.InitEvent:SetScript("OnEvent", function(_, event, arg)
 		end
 		SpellQueueTest.SlideBar:SetValue(GetCVar("SpellQueueWindow"))
 	elseif event == "PLAYER_LOGOUT" then
-		if _G[sqtset] then _G[sqtset] = cfg	end
+		if _G[sqtset] then _G[sqtset] = cfg end
 	end
 end)
 
