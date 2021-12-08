@@ -79,9 +79,10 @@ end
 function SpellQueueTest:ValCompare(a, b)
 	local function copyDefaults(src, dst)
 		-- If no source (defaults) is specified, return an empty table:
-		if type(src) ~= "table" then return {} end
+		if type(src) ~= "table" then return {} end -- almost always table
 		-- If no target (saved variable) is specified, create a new table:
-		if not type(dst) then dst = {} end
+		--if not type(dst) then dst = {} end -- never works
+		if not dst then dst = {} end --if type(dst) ~= "table" then dst = {} end
 		-- Loop through the source (defaults):
 		for k, v in pairs(src) do
 			-- If the value is a sub-table:
@@ -97,6 +98,7 @@ function SpellQueueTest:ValCompare(a, b)
 		-- Return the destination table:
 		return dst
 	end
-
-	return copyDefaults(a, b)
+	b = copyDefaults(a, b)
+	return b
 end
+-- 없어진 변수 지우기

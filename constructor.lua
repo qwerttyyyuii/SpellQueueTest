@@ -124,6 +124,5 @@ SpellQueueTest.AutoCheck:SetChecked(false)
 
 SpellQueueTest.InitEvent = CreateFrame("Frame")
 SpellQueueTest.InitEvent:RegisterEvent("ADDON_LOADED")
-SpellQueueTest.InitEvent:RegisterEvent("PLAYER_LOGOUT")
 
 SpellQueueTest.EventFrame = CreateFrame("Frame")

@@ -9,7 +9,6 @@ local cfg
 local pre = 0
 local first = true
 local PGUID = UnitGUID("player")
-local sqtset = "SpellQueueTestSettings"
 
 SpellQueueTest.DragButton:SetScript("OnHide", function(self)
 	SpellQueueTest:InitFrame()
@@ -92,8 +91,7 @@ end)
 
 SpellQueueTest.InitEvent:SetScript("OnEvent", function(_, event, arg)
 	if event == "ADDON_LOADED" and arg == "SpellQueueTest" then
-		if not _G[sqtset] then _G[sqtset] = {} end
-		cfg = SpellQueueTest:ValCompare(SpellQueueTest.Settings, _G[sqtset])
+		cfg = SpellQueueTest:ValCompare(SpellQueueTest.Settings, _G["SpellQueueTestSettings"])
 		SpellQueueTest.AutoCheck:SetChecked(cfg.Autorun)
 		if SpellQueueTest.AutoCheck:GetChecked() then
 			SpellQueueTest.EventFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
@@ -101,8 +99,6 @@ SpellQueueTest.InitEvent:SetScript("OnEvent", function(_, event, arg)
 			SpellQueueTest.EventFrame:UnregisterEvent("PLAYER_TARGET_CHANGED")
 		end
 		SpellQueueTest.SlideBar:SetValue(GetCVar("SpellQueueWindow"))
-	elseif event == "PLAYER_LOGOUT" then
-		if _G[sqtset] then _G[sqtset] = cfg end
 	end
 end)
 
