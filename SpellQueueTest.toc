@@ -1,0 +1,12 @@
+## Interface: 90105
+## Title: SpellQueueTest
+## Author: Leming
+## Version: 90105.2
+## Notes: |c00008000SpellQueueTest|r
+## SavedVariables: SpellQueueTestSettings
+
+localization.lua
+variable.lua
+util.lua
+constructor.lua
+main.lua
