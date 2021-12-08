@@ -9,6 +9,7 @@ SpellQueueTest.DragButton:SetPoint("CENTER", UIParent, "CENTER", const.frame_x, 
 SpellQueueTest.DragButton:SetSize((const.width * 4) + const.margin, (const.height * 3) + const.margin)
 SpellQueueTest.DragButton:SetMovable(true)
 SpellQueueTest.DragButton:EnableMouse(true)
+SpellQueueTest.DragButton:Hide()
 SpellQueueTest.DragButton:SetBackdrop({
 	bgFile = "Interface/Tooltips/UI-Tooltip-Background",
 	edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
