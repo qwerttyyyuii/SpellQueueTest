@@ -7,7 +7,6 @@ local SetCVar, GetCVar, GetSpellInfo = C_CVar.SetCVar, C_CVar.GetCVar, GetSpellI
 local UIParent = UIParent
 
 local PGUID = UnitGUID("player")
-local first = true
 local INSTANT = 0
 
 SpellQueueTest.DragButton:SetScript("OnHide", function(self)
@@ -40,16 +39,11 @@ end)
 SpellQueueTest.SlideBar:SetScript("OnValueChanged", function(_, newvalue)
 	local dval = math.floor(newvalue)
 
-	if first then
-		first = false
-		_G[SpellQueueTest.SlideBar:GetName().."Text"]:SetText(dval.."ms")
-		SpellQueueTest.EditBox:SetText(dval)
-		return
-	end
 	if not SetCVar("SpellQueueWindow", dval) then
 		SpellQueueTest:SQTprint(L["SetFail"], dval)
 		return
 	end
+
 	_G[SpellQueueTest.SlideBar:GetName().."Text"]:SetText(dval.."ms")
 	SpellQueueTest.EditBox:SetText(dval)
 end)
@@ -71,21 +65,21 @@ end)
 
 SpellQueueTest.EditBox:SetScript("OnEnterPressed", function(self)
 	local dval = tonumber(SpellQueueTest.EditBox:GetText())
-	if not dval then
+
+	if dval then
+		dval = SpellQueueTest:tointeger(dval)
+		if dval > const.queuemax then dval = const.queuemax end
+		if dval < const.queuemin then dval = const.queuemin	end
+		if not SetCVar("SpellQueueWindow", dval) then
+			SpellQueueTest:SQTprint(L["SetFail"], dval)
+			return
+		end
+		SpellQueueTest.SlideBar:SetValue(dval)
+		self:ClearFocus()
+	else
 		SpellQueueTest:SQTprint(L["EnterInt"])
-		SpellQueueTest.EditBox:SetText(SpellQueueTest.SlideBar:GetValue())
-		return
 	end
-	dval = SpellQueueTest:tointeger(dval)
-	if dval > const.queuemax then dval = const.queuemax end
-	if dval < const.queuemin then dval = const.queuemin	end
-	if not SetCVar("SpellQueueWindow", dval) then
-		SpellQueueTest:SQTprint(L["SetFail"], dval)
-		return
-	end
-	SpellQueueTest.SlideBar:SetValue(dval)
 	SpellQueueTest.EditBox:SetText(SpellQueueTest.SlideBar:GetValue())
-	self:ClearFocus()
 end)
 
 SpellQueueTest.EditBox:SetScript("OnEscapePressed", function(self)
@@ -96,6 +90,8 @@ end)
 SpellQueueTest.InitEvent:SetScript("OnEvent", function(_, event, arg)
 	if event == "ADDON_LOADED" and arg == "SpellQueueTest" then
 		cfg = SpellQueueTest:ValCompare(SpellQueueTest.Settings, _G["SpellQueueTestSettings"])
+		if not cfg.cleanexit then SpellQueueTest:SQTprint("Abnormal termination") end
+		cfg.cleanexit = false
 		SpellQueueTest.AutoCheck:SetChecked(cfg.Autorun)
 		SpellQueueTest.AllSpell:SetChecked(cfg.AllSpell)
 		if cfg.Autorun then
@@ -103,9 +99,13 @@ SpellQueueTest.InitEvent:SetScript("OnEvent", function(_, event, arg)
 		else
 			SpellQueueTest.EventFrame:UnregisterEvent("PLAYER_TARGET_CHANGED")
 		end
-		SpellQueueTest.SlideBar:SetValue(GetCVar("SpellQueueWindow"))
 		SpellQueueTest.CombatFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
 		SpellQueueTest.CombatFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+	elseif event == "PLAYER_LOGIN" then
+		SpellQueueTest.SlideBar:SetValue(GetCVar("SpellQueueWindow"))
+		SpellQueueTest.EditBox:SetText(GetCVar("SpellQueueWindow"))
+	elseif event == "PLAYER_LOGOUT" then
+		cfg.cleanexit = true
 	end
 end)
 
