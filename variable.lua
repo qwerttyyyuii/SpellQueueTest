@@ -25,4 +25,5 @@ SpellQueueTest.cfg = nil
 SpellQueueTest.Settings = {
 	Autorun = true,
 	AllSpell = true,
+	cleanexit = false,
 }
