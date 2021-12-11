@@ -2,11 +2,12 @@ local _, SpellQueueTest = ...
 
 local const = SpellQueueTest.const
 local L = SpellQueueTest.L
-local GetCVar = C_CVar.GetCVar
+local GetCVar, GetNetStats = C_CVar.GetCVar, GetNetStats
 
 function SpellQueueTest:resetvalue()
 	self.avg.cnt = 0
 	self.avg.sum = 0
+	self.avg.pre = 0
 end
 
 function SpellQueueTest:tointeger(x)
@@ -23,7 +24,7 @@ function SpellQueueTest:LogInsert(str)
 		self.ArrowButton:SetText(const.close)
 		frame:Show()
 	end
-	frame.EditBox:Insert(const.str_sqt.." "..str.."\n")
+	frame.EditBox:Insert(const.sht_sqt.." "..str.."\n")
 end
 
 function SpellQueueTest:CloseEditor()
@@ -89,7 +90,7 @@ function SpellQueueTest:LogColor(val)
 	return str
 end
 
-function SpellQueueTest:CLEU(spellName)
+function SpellQueueTest:CLEU(spellID, spellName)
 	local cur = debugprofilestop() / 1000
 	local avg = self.avg
 
@@ -101,16 +102,33 @@ function SpellQueueTest:CLEU(spellName)
 		local dif = cur - avg.pre
 		avg.sum = avg.sum + dif
 		local Arithmean = self:LogColor(avg.sum / avg.cnt)
-		self:LogInsert(string.format("%03d ["..L["dif"].."]%s"..L["second"].." ["..L["avg"].."]%s"..L["second"].." %s",
-									avg.cnt,
-									self:LogColor(dif),
-									Arithmean,
-									spellName))
-		self.ResultStr:SetText(string.format(L["result"], avg.sum, avg.cnt, Arithmean))
+		self:LogInsert(string.format("% 3d ["..L["dif"].."]%s"..L["second"].." ["..L["avg"].."]%s"..L["second"].." % 6d %s",
+									avg.cnt, self:LogColor(dif), Arithmean, spellID, spellName))
+		self.ResultStr:SetText(string.format(L["result"], SpellQueueTest:TimeSeparate(avg.sum), avg.cnt, Arithmean))
 	end
-
 	avg.pre = cur
 	avg.cnt = avg.cnt + 1
+end
+
+function SpellQueueTest:TimeSeparate(time)
+	local sec, min = 60, 60 * 60
+	local str
+	local function Second(val) return val % sec end
+	local function Minute(val) return val / sec end
+	local function Hour(val) return val / min end
+
+	if sec > time and 0 <= time then
+		str = string.format("%.1f"..L["second"], time)
+	elseif min > time and sec <= time then
+		str = string.format("%02d:%02d", Minute(time), Second(time))
+	elseif min <= time then
+		local hr = time % min
+		local mr = hr % sec
+		str = string.format("%d:%02d:%02d", Hour(time), Minute(hr), Second(mr))
+	else
+		str = string.format("ERROR")
+	end
+	return str
 end
 
 function SpellQueueTest:isRunning()

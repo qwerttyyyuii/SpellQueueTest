@@ -1,37 +1,35 @@
 local _, SpellQueueTest = ...
 
 local locale = GetLocale()
-local locale = "enUS" -- test
+--local locale = "enUS" -- test
 local L = {}
 
-local function DefalultLocale()
-	L["Dummy"] = "dummy"
-	L["Autorun"] = "Pop-up"
-	L["dif"] = "Interval"
-	L["avg"] = "Average"
-	L["second"] = "s"
-	L["Autorun Desc"] = "Auto Pop-up when clicking the Dummy"
-	L["Close"] = "Close"
-	L["Enable"] = "Enable"
-	L["Disable"] = "Disable"
-	L["ReTest"] = "Re-test"
-	L["ValInit"] = "Ready for the Re-test"
-	L["RstPos"] = "Reset position"
-	L["User"] = "Home"
-	L["Server"] = "World"
-	L["SetFail"] = "Set Fail"
-	L["EnterInt"] = "Enter the correct Natural Number"
-	L["CVarSQW"] = "CVar SpellQueueWindow"
-	L["StartButton"] = "Enabled"
-	L["AllSpell Desc"] = [[If unchecked, you can only test with Smite.
+L["Dummy"] = "dummy"
+L["Autorun"] = "Pop-up"
+L["dif"] = "Interval"
+L["avg"] = "Average"
+L["second"] = "s"
+L["Autorun Desc"] = "Auto Pop-up when clicking the Dummy"
+L["Close"] = "Close"
+L["Enable"] = "Enable"
+L["Disable"] = "Disable"
+L["ReTest"] = "Re-test"
+L["ValInit"] = "Ready for the Re-test"
+L["RstPos"] = "Reset position"
+L["User"] = "Home"
+L["Server"] = "World"
+L["SetFail"] = "Set Fail"
+L["EnterInt"] = "Enter the correct Natural Number"
+L["CVarSQW"] = "CVar SpellQueueWindow"
+L["StartButton"] = "Enabled"
+L["AllSpell Desc"] = [[If unchecked, you can only test with Smite.
 When checked, you can test with any skill, but please note that if a skill with a different GCD is involved during the test, the average value will be different and you will not be able to get a proper result.
 Advanced) Use SPELL_CAST_SUCCESS for instant spells and SPELL_CAST_START for casting spells.]]
-	L["AllSpell"] = "All Spell"
-	L["wating"] = "Click the Enable to start\n A minimum of 20 tests is recommended."
-	L["watingspell"] = "When you cast a spell, the test begins."
-	L["Timebase"] = "Time-based generated"
-	L["result"] = "Total %.1f"..L["second"].." Cast %d times\n Have an average GCD of %s"..L["second"]
-end
+L["AllSpell"] = "All Spell"
+L["wating"] = "Click the Enable to start\n A minimum of 20 tests is recommended."
+L["watingspell"] = "When you cast a spell, the test begins."
+L["Timebase"] = "Time-based generated"
+L["result"] = "Total %s Cast %d times\n Have an average GCD of %s"..L["second"]
 
 if locale == "koKR" then
 	L["Dummy"] = "허수아비"
@@ -59,11 +57,7 @@ if locale == "koKR" then
 	L["wating"] = "시작하려면 활성화 버튼을 누르세요\n 테스트는 최소 20회 이상을 권장합니다."
 	L["watingspell"] = "주문을 시전하면 테스트가 시작됩니다."
 	L["Timebase"] = "시간 기준 생성됨"
-	L["result"] = "%.1f"..L["second"].." 동안 %d회 시전하였고\n 평균 %s"..L["second"].."의 글로벌 쿨타임을 가짐"
-elseif locale == "enUS" then
-	DefalultLocale()
-else
-	DefalultLocale()
+	L["result"] = "%s 동안 %d회 시전하였고\n 평균 %s"..L["second"].."의 글로벌 쿨타임을 가짐"
 end
 
 SpellQueueTest.L = L

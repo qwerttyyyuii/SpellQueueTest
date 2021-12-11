@@ -1,14 +1,13 @@
 local _, SpellQueueTest = ...
 
-local SetCVar, GetCVar, GetNetStats = C_CVar.SetCVar, C_CVar.GetCVar, GetNetStats
-local UIParent = UIParent
 local const = SpellQueueTest.const
-local timer = SpellQueueTest.timer
+local cfg = SpellQueueTest.cfg
 local L = SpellQueueTest.L
+local SetCVar, GetCVar, GetSpellInfo = C_CVar.SetCVar, C_CVar.GetCVar, GetSpellInfo
+local UIParent = UIParent
 
-local cfg
-local first = true
 local PGUID = UnitGUID("player")
+local first = true
 local INSTANT = 0
 
 SpellQueueTest.DragButton:SetScript("OnHide", function(self)
@@ -131,11 +130,11 @@ SpellQueueTest.EventFrame:SetScript("OnEvent", function(_, event)
 
 			if select(4, GetSpellInfo(spellID)) == INSTANT then
 				if combatEvent == "SPELL_CAST_SUCCESS" then
-					SpellQueueTest:CLEU(spellName)
+					SpellQueueTest:CLEU(spellID, spellName)
 				end
 			else
 				if combatEvent == "SPELL_CAST_START" then
-					SpellQueueTest:CLEU(spellName)
+					SpellQueueTest:CLEU(spellID, spellName)
 				end
 			end
 		end

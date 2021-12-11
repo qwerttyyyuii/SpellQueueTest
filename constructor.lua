@@ -1,8 +1,8 @@
 local _, SpellQueueTest = ...
 
-local CreateFrame, UIParent = CreateFrame, UIParent
 local const = SpellQueueTest.const
 local L = SpellQueueTest.L
+local CreateFrame, UIParent = CreateFrame, UIParent
 
 SpellQueueTest.DragButton = CreateFrame("Frame", "SpellQueueTestMainFrame", UIParent, BackdropTemplateMixin and "BackdropTemplate" or nil)
 SpellQueueTest.DragButton:SetPoint("CENTER", UIParent, "CENTER", const.frame_x, const.frame_y)
@@ -103,7 +103,6 @@ SpellQueueTest.logFrame = CreateFrame("ScrollFrame", nil, SpellQueueTest.DragBut
 SpellQueueTest.logFrame:SetPoint("TOP", SpellQueueTest.DragButton, "BOTTOM", 0, -5)
 SpellQueueTest.logFrame:SetSize(SpellQueueTest.DragButton:GetWidth() - 12, 200)
 SpellQueueTest.logFrame.CharCount:Hide()
---SpellQueueTest.logFrame.EditBox:SetFont("Fonts\\ARIALN.ttf", 13)
 SpellQueueTest.logFrame.EditBox:SetFont("Interface\\AddOns\\SpellQueueTest\\D2Coding-Ver1.3.2-20180524.ttf", 11)
 SpellQueueTest.logFrame.EditBox:SetWidth(SpellQueueTest.logFrame:GetWidth()) -- multiline editboxes need a width declared!!
 SpellQueueTest.logFrame.EditBox:SetAllPoints()
@@ -133,8 +132,7 @@ _G[SpellQueueTest.AllSpell:GetName().."Text"]:SetPoint("LEFT", SpellQueueTest.Al
 _G[SpellQueueTest.AllSpell:GetName().."Text"]:SetText(L["AllSpell"])
 SpellQueueTest.AllSpell.tooltip = L["AllSpell Desc"]
 
-SpellQueueTest.InitEvent = CreateFrame("Frame")
-SpellQueueTest.InitEvent:RegisterEvent("ADDON_LOADED")
-
 SpellQueueTest.EventFrame = CreateFrame("Frame")
 SpellQueueTest.CombatFrame = CreateFrame("Frame")
+SpellQueueTest.InitEvent = CreateFrame("Frame")
+SpellQueueTest.InitEvent:RegisterEvent("ADDON_LOADED")
