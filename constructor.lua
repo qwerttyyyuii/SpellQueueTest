@@ -6,7 +6,7 @@ local L = SpellQueueTest.L
 
 SpellQueueTest.DragButton = CreateFrame("Frame", "SpellQueueTestMainFrame", UIParent, BackdropTemplateMixin and "BackdropTemplate" or nil)
 SpellQueueTest.DragButton:SetPoint("CENTER", UIParent, "CENTER", const.frame_x, const.frame_y)
-SpellQueueTest.DragButton:SetSize((const.width * 4) + const.margin, (const.height * 3) + const.margin)
+SpellQueueTest.DragButton:SetSize((const.width * 4) + const.margin, (const.height * 4) + const.margin)
 SpellQueueTest.DragButton:SetMovable(true)
 SpellQueueTest.DragButton:EnableMouse(true)
 SpellQueueTest.DragButton:Hide()
@@ -32,7 +32,7 @@ end)
 table.insert(UISpecialFrames, SpellQueueTest.DragButton:GetName()) -- ESC key register
 
 SpellQueueTest.StopButton = CreateFrame("Button", nil, SpellQueueTest.DragButton, "UIPanelButtonTemplate")
-SpellQueueTest.StopButton:SetPoint("CENTER", SpellQueueTest.DragButton, "CENTER", 0, -const.height)
+SpellQueueTest.StopButton:SetPoint("CENTER", SpellQueueTest.DragButton, "CENTER", 0, -const.height - 10)
 SpellQueueTest.StopButton:SetSize(const.width, const.height)
 SpellQueueTest.StopButton:SetText(L["Disable"])
 SpellQueueTest.StopButton:Disable()
@@ -55,7 +55,7 @@ SpellQueueTest.HideButton:SetText(L["Close"])
 
 SpellQueueTest.SlideBar = CreateFrame("Slider", "SpellQueueTestSlideBar", SpellQueueTest.StopButton, "OptionsSliderTemplate")
 SpellQueueTest.SlideBar:SetPoint("BOTTOM", SpellQueueTest.StopButton, "TOP", 0, 15)
-SpellQueueTest.SlideBar:SetSize(const.queuemax - const.margin, const.height)
+SpellQueueTest.SlideBar:SetSize(const.queuemax - (const.margin / 2), const.height)
 SpellQueueTest.SlideBar:SetThumbTexture("Interface\\Buttons\\UI-SliderBar-Button-Horizontal")
 SpellQueueTest.SlideBar:SetMinMaxValues(const.queuemin, const.queuemax)
 SpellQueueTest.SlideBar:SetValueStep(1)
@@ -84,8 +84,13 @@ SpellQueueTest.EditBox:SetFontObject(GameFontHighlightSmall)
 SpellQueueTest.EditBox:SetJustifyH("Center")
 SpellQueueTest:BarEnable(false)
 
+SpellQueueTest.ResultStr = SpellQueueTest.StopButton:CreateFontString(SpellQueueTest.StopButton, "OVERLAY")--, "GameTooltipText")
+SpellQueueTest.ResultStr:SetPoint("BOTTOM", SpellQueueTest.StopButton, "TOP", 0, 65)
+SpellQueueTest.ResultStr:SetFont("Fonts\\2002.TTF", 12)
+SpellQueueTest.ResultStr:SetText(L["wating"])
+
 SpellQueueTest.title = SpellQueueTest.DragButton:CreateFontString(SpellQueueTest.DragButton, "OVERLAY", "GameTooltipText")
-SpellQueueTest.title:SetPoint("BOTTOM", SpellQueueTest.DragButton, "TOP", 0, 0)
+SpellQueueTest.title:SetPoint("TOP", SpellQueueTest.DragButton, "TOP", 0, -6)
 SpellQueueTest.title:SetFont("Fonts\\FRIZQT__.TTF", 15, "OUTLINE")
 SpellQueueTest.title:SetText("SpellQueueTest")
 
@@ -99,7 +104,7 @@ SpellQueueTest.logFrame:SetPoint("TOP", SpellQueueTest.DragButton, "BOTTOM", 0, 
 SpellQueueTest.logFrame:SetSize(SpellQueueTest.DragButton:GetWidth() - 12, 200)
 SpellQueueTest.logFrame.CharCount:Hide()
 --SpellQueueTest.logFrame.EditBox:SetFont("Fonts\\ARIALN.ttf", 13)
-SpellQueueTest.logFrame.EditBox:SetFont("Interface\\AddOns\\SpellQueueTest\\D2Coding-Ver1.3.2-20180524.ttf", 12)
+SpellQueueTest.logFrame.EditBox:SetFont("Interface\\AddOns\\SpellQueueTest\\D2Coding-Ver1.3.2-20180524.ttf", 11)
 SpellQueueTest.logFrame.EditBox:SetWidth(SpellQueueTest.logFrame:GetWidth()) -- multiline editboxes need a width declared!!
 SpellQueueTest.logFrame.EditBox:SetAllPoints()
 SpellQueueTest.logFrame:Hide()
@@ -120,9 +125,16 @@ SpellQueueTest.AutoCheck:SetPoint("TOPRIGHT", SpellQueueTest.DragButton, "TOPRIG
 _G[SpellQueueTest.AutoCheck:GetName().."Text"]:SetPoint("LEFT", SpellQueueTest.AutoCheck, "RIGHT", 0, 0)
 _G[SpellQueueTest.AutoCheck:GetName().."Text"]:SetText(L["Autorun"])
 SpellQueueTest.AutoCheck.tooltip = L["Autorun Desc"]
-SpellQueueTest.AutoCheck:SetChecked(false)
+
+SpellQueueTest.AllSpell = CreateFrame("CheckButton", "SpellQueueTestAllSpell", SpellQueueTest.DragButton, "ChatConfigCheckButtonTemplate")
+SpellQueueTest.AllSpell:SetSize(25, 25)
+SpellQueueTest.AllSpell:SetPoint("TOP", SpellQueueTest.AutoCheck, "BOTTOM", 0, 5)
+_G[SpellQueueTest.AllSpell:GetName().."Text"]:SetPoint("LEFT", SpellQueueTest.AllSpell, "RIGHT", 0, 0)
+_G[SpellQueueTest.AllSpell:GetName().."Text"]:SetText(L["AllSpell"])
+SpellQueueTest.AllSpell.tooltip = L["AllSpell Desc"]
 
 SpellQueueTest.InitEvent = CreateFrame("Frame")
 SpellQueueTest.InitEvent:RegisterEvent("ADDON_LOADED")
 
 SpellQueueTest.EventFrame = CreateFrame("Frame")
+SpellQueueTest.CombatFrame = CreateFrame("Frame")

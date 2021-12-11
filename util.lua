@@ -1,6 +1,7 @@
 local _, SpellQueueTest = ...
 
 local const = SpellQueueTest.const
+local L = SpellQueueTest.L
 local GetCVar = C_CVar.GetCVar
 
 function SpellQueueTest:resetvalue()
@@ -48,13 +49,26 @@ function SpellQueueTest:BarEnable(isEnable)
 	_G[self.EditBox:GetName()]:SetTextColor(1, 1, 1, val)
 end
 
+function SpellQueueTest:CheckEnable(isEnable)
+	local val = 0.5
+	self.AllSpell:Disable()
+
+	if isEnable then
+		val = 1
+		self.AllSpell:Enable()
+	end
+	_G[self.AllSpell:GetName().."Text"]:SetVertexColor(1, 1, 1, val)
+end
+
 function SpellQueueTest:InitFrame()
+	self.run = false
 	self.EventFrame:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:resetvalue()
 	self.TestButton:Hide()
 	self.StartButton:Show()
 	self:BarEnable(false)
 	self.EditBox:SetText(self:tointeger(self.SlideBar:GetValue()))
+	self.ResultStr:SetText(L["wating"])
 end
 
 function SpellQueueTest:LogColor(val)
@@ -73,6 +87,34 @@ function SpellQueueTest:LogColor(val)
 		str = "ERROR "..valstr
 	end
 	return str
+end
+
+function SpellQueueTest:CLEU(spellName)
+	local cur = debugprofilestop() / 1000
+	local avg = self.avg
+
+	if avg.cnt == 0 then
+		self:LogInsert(string.format(L["CVarSQW"].." %dms", GetCVar("SpellQueueWindow")))
+		self:LogInsert(string.format("Ping ["..L["User"].."]%dms ["..L["Server"].."]%dms", select(3, GetNetStats())))
+		self.ResultStr:SetText(L["Timebase"])
+	else
+		local dif = cur - avg.pre
+		avg.sum = avg.sum + dif
+		local Arithmean = self:LogColor(avg.sum / avg.cnt)
+		self:LogInsert(string.format("%03d ["..L["dif"].."]%s"..L["second"].." ["..L["avg"].."]%s"..L["second"].." %s",
+									avg.cnt,
+									self:LogColor(dif),
+									Arithmean,
+									spellName))
+		self.ResultStr:SetText(string.format(L["result"], avg.sum, avg.cnt, Arithmean))
+	end
+
+	avg.pre = cur
+	avg.cnt = avg.cnt + 1
+end
+
+function SpellQueueTest:isRunning()
+	return self.run
 end
 
 function SpellQueueTest:ValCompare(a, b)
@@ -100,4 +142,3 @@ function SpellQueueTest:ValCompare(a, b)
 	b = copyDefaults(a, b)
 	return b
 end
--- 없어진 변수 지우기

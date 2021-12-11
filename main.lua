@@ -3,12 +3,13 @@ local _, SpellQueueTest = ...
 local SetCVar, GetCVar, GetNetStats = C_CVar.SetCVar, C_CVar.GetCVar, GetNetStats
 local UIParent = UIParent
 local const = SpellQueueTest.const
+local timer = SpellQueueTest.timer
 local L = SpellQueueTest.L
 
 local cfg
-local pre = 0
 local first = true
 local PGUID = UnitGUID("player")
+local INSTANT = 0
 
 SpellQueueTest.DragButton:SetScript("OnHide", function(self)
 	SpellQueueTest:InitFrame()
@@ -27,12 +28,14 @@ SpellQueueTest.StopButton:SetScript("OnClick", function()
 end)
 
 SpellQueueTest.StartButton:SetScript("OnClick", function()
+	SpellQueueTest.run = true
 	SpellQueueTest.EventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	SpellQueueTest.StartButton:Hide()
 	SpellQueueTest.TestButton:Show()
 	SpellQueueTest.StopButton:Enable()
 	SpellQueueTest:BarEnable(true)
 	SpellQueueTest:LogInsert(L["StartButton"])
+	SpellQueueTest.ResultStr:SetText(L["watingspell"])
 end)
 
 SpellQueueTest.SlideBar:SetScript("OnValueChanged", function(_, newvalue)
@@ -53,10 +56,12 @@ SpellQueueTest.SlideBar:SetScript("OnValueChanged", function(_, newvalue)
 end)
 
 SpellQueueTest.TestButton:SetScript("OnClick", function()
+	SpellQueueTest.run = true
 	SpellQueueTest.StopButton:Enable()
 	SpellQueueTest:resetvalue()
 	SpellQueueTest:BarEnable(true)
 	SpellQueueTest:LogInsert(L["ValInit"])
+	SpellQueueTest.ResultStr:SetText(L["watingspell"])
 end)
 
 SpellQueueTest.HideButton:SetScript("OnClick", function()
@@ -93,12 +98,15 @@ SpellQueueTest.InitEvent:SetScript("OnEvent", function(_, event, arg)
 	if event == "ADDON_LOADED" and arg == "SpellQueueTest" then
 		cfg = SpellQueueTest:ValCompare(SpellQueueTest.Settings, _G["SpellQueueTestSettings"])
 		SpellQueueTest.AutoCheck:SetChecked(cfg.Autorun)
-		if SpellQueueTest.AutoCheck:GetChecked() then
+		SpellQueueTest.AllSpell:SetChecked(cfg.AllSpell)
+		if cfg.Autorun then
 			SpellQueueTest.EventFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
 		else
 			SpellQueueTest.EventFrame:UnregisterEvent("PLAYER_TARGET_CHANGED")
 		end
 		SpellQueueTest.SlideBar:SetValue(GetCVar("SpellQueueWindow"))
+		SpellQueueTest.CombatFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
+		SpellQueueTest.CombatFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
 	end
 end)
 
@@ -113,28 +121,35 @@ SpellQueueTest.EventFrame:SetScript("OnEvent", function(_, event)
 			end
 		end
 	elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
-		local _, combatEvent, _, srcGUID, _, _, _, destGUID, _, _, _, spellID = CombatLogGetCurrentEventInfo()
+		local _, combatEvent, _, srcGUID, _, _, _, destGUID, _, _, _, spellID, spellName = CombatLogGetCurrentEventInfo()
 		if not destGUID then return end
 
-		if srcGUID == PGUID and combatEvent == "SPELL_CAST_SUCCESS" then
-			--if spellID == 585 then
-				local cur = debugprofilestop() / 1000
-				local avg = SpellQueueTest.avg
+		if srcGUID == PGUID and (combatEvent == "SPELL_CAST_START" or combatEvent == "SPELL_CAST_SUCCESS") then
+			if not cfg.AllSpell then
+				if spellID ~= 585 then return end
+			end
 
-				if avg.cnt == 0 then
-					SpellQueueTest:LogInsert(string.format(L["CVarSQW"].." %dms", GetCVar("SpellQueueWindow")))
-					SpellQueueTest:LogInsert(string.format("Ping ["..L["User"].."]%dms ["..L["Server"].."]%dms", select(3, GetNetStats())))
-				else
-					local dif = cur - pre
-					avg.sum = avg.sum + dif
-					SpellQueueTest:LogInsert(string.format("%03d ["..L["dif"].."]%s"..L["second"].." ["..L["avg"].."]%s"..L["second"],
-															avg.cnt,
-															SpellQueueTest:LogColor(dif),
-															SpellQueueTest:LogColor(avg.sum / avg.cnt)))
+			if select(4, GetSpellInfo(spellID)) == INSTANT then
+				if combatEvent == "SPELL_CAST_SUCCESS" then
+					SpellQueueTest:CLEU(spellName)
 				end
-				pre = cur
-				avg.cnt = avg.cnt + 1
-			--end
+			else
+				if combatEvent == "SPELL_CAST_START" then
+					SpellQueueTest:CLEU(spellName)
+				end
+			end
+		end
+	end
+end)
+
+SpellQueueTest.CombatFrame:SetScript("OnEvent", function(_, event)
+	if SpellQueueTest:isRunning() then
+		if event == "PLAYER_REGEN_DISABLED" then
+			SpellQueueTest:CheckEnable(false)
+			SpellQueueTest:BarEnable(false)
+		elseif event == "PLAYER_REGEN_ENABLED" then
+			SpellQueueTest:CheckEnable(true)
+			SpellQueueTest:BarEnable(true)
 		end
 	end
 end)
@@ -165,6 +180,14 @@ SpellQueueTest.AutoCheck:SetScript("OnClick", function(self)
 	else
 		cfg.Autorun = false
 		SpellQueueTest.EventFrame:UnregisterEvent("PLAYER_TARGET_CHANGED")
+	end
+end)
+
+SpellQueueTest.AllSpell:SetScript("OnClick", function(self)
+	if self:GetChecked() then
+		cfg.AllSpell = true
+	else
+		cfg.AllSpell = false
 	end
 end)
 
