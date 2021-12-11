@@ -6,7 +6,7 @@ SpellQueueTest.const = {
 	queuemax = 400,
 	width = 90,
 	height = 30,
-	margin = 40,
+	margin = 70,
 	frame_x = 0,
 	frame_y = 250,
 	open = "▼",
@@ -17,7 +17,9 @@ SpellQueueTest.const = {
 SpellQueueTest.avg = {
 	sum = 0,
 	cnt = 0,
+	pre = 0,
 }
+SpellQueueTest.run = false
 SpellQueueTest.spellinfo = {
 	smite = {
 		spellID = 585,
@@ -26,4 +28,5 @@ SpellQueueTest.spellinfo = {
 }
 SpellQueueTest.Settings = {
 	Autorun = true,
+	AllSpell = true,
 }
