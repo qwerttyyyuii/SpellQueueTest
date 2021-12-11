@@ -2,6 +2,7 @@ local _, SpellQueueTest = ...
 
 SpellQueueTest.const = {
 	str_sqt = "|c00008000SpellQueueTest|r",
+	sht_sqt = "|c00008000SQT|r",
 	queuemin = 0,
 	queuemax = 400,
 	width = 90,
@@ -20,12 +21,7 @@ SpellQueueTest.avg = {
 	pre = 0,
 }
 SpellQueueTest.run = false
-SpellQueueTest.spellinfo = {
-	smite = {
-		spellID = 585,
-		castTime = 1500,
-	},
-}
+SpellQueueTest.cfg = nil
 SpellQueueTest.Settings = {
 	Autorun = true,
 	AllSpell = true,
