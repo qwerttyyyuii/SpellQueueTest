@@ -3,9 +3,9 @@ local _, SpellQueueTest = ...
 local const = SpellQueueTest.const
 local cfg = SpellQueueTest.cfg
 local L = SpellQueueTest.L
-local SetCVar, GetCVar, GetSpellInfo = C_CVar.SetCVar, C_CVar.GetCVar, GetSpellInfo
+local SetCVar, GetCVar = C_CVar.SetCVar, C_CVar.GetCVar
+local UnitName, GetSpellInfo = UnitName, GetSpellInfo
 local UIParent = UIParent
-
 local PGUID = UnitGUID("player")
 local INSTANT = 0
 
@@ -26,7 +26,6 @@ SpellQueueTest.StopButton:SetScript("OnClick", function()
 end)
 
 SpellQueueTest.StartButton:SetScript("OnClick", function()
-	SpellQueueTest.run = true
 	SpellQueueTest.EventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	SpellQueueTest.StartButton:Hide()
 	SpellQueueTest.TestButton:Show()
@@ -49,7 +48,6 @@ SpellQueueTest.SlideBar:SetScript("OnValueChanged", function(_, newvalue)
 end)
 
 SpellQueueTest.TestButton:SetScript("OnClick", function()
-	SpellQueueTest.run = true
 	SpellQueueTest.StopButton:Enable()
 	SpellQueueTest:resetvalue()
 	SpellQueueTest:BarEnable(true)
@@ -92,13 +90,14 @@ SpellQueueTest.InitEvent:SetScript("OnEvent", function(_, event, arg)
 		cfg = SpellQueueTest:ValCompare(SpellQueueTest.Settings, _G["SpellQueueTestSettings"])
 		SpellQueueTest.AutoCheck:SetChecked(cfg.Autorun)
 		SpellQueueTest.AllSpell:SetChecked(cfg.AllSpell)
+		SpellQueueTest:BarEnable(false)
 		if cfg.Autorun then
 			SpellQueueTest.EventFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
 		else
 			SpellQueueTest.EventFrame:UnregisterEvent("PLAYER_TARGET_CHANGED")
 		end
-		SpellQueueTest.CombatFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
-		SpellQueueTest.CombatFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+		--SpellQueueTest.CombatFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
+		--SpellQueueTest.CombatFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
 	elseif event == "PLAYER_LOGIN" then
 		SpellQueueTest.SlideBar:SetValue(GetCVar("SpellQueueWindow"))
 		SpellQueueTest.EditBox:SetText(GetCVar("SpellQueueWindow"))
@@ -138,7 +137,7 @@ SpellQueueTest.EventFrame:SetScript("OnEvent", function(_, event)
 end)
 
 SpellQueueTest.CombatFrame:SetScript("OnEvent", function(_, event)
-	if SpellQueueTest:isRunning() then
+	if SpellQueueTest:IsRunning() then
 		if event == "PLAYER_REGEN_DISABLED" then
 			SpellQueueTest:CheckEnable(false)
 			SpellQueueTest:BarEnable(false)

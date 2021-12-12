@@ -20,7 +20,6 @@ SpellQueueTest.avg = {
 	cnt = 0,
 	pre = 0,
 }
-SpellQueueTest.run = false
 SpellQueueTest.cfg = nil
 SpellQueueTest.Settings = {
 	Autorun = true,

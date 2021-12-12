@@ -62,7 +62,6 @@ function SpellQueueTest:CheckEnable(isEnable)
 end
 
 function SpellQueueTest:InitFrame()
-	self.run = false
 	self.EventFrame:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:resetvalue()
 	self.TestButton:Hide()
@@ -104,7 +103,7 @@ function SpellQueueTest:CLEU(spellID, spellName)
 		local Arithmean = self:LogColor(avg.sum / avg.cnt)
 		self:LogInsert(string.format("% 3d ["..L["dif"].."]%s"..L["second"].." ["..L["avg"].."]%s"..L["second"].." % 6d %s",
 									avg.cnt, self:LogColor(dif), Arithmean, spellID, spellName))
-		self.ResultStr:SetText(string.format(L["result"], SpellQueueTest:TimeSeparate(avg.sum), avg.cnt, Arithmean))
+		self.ResultStr:SetText(string.format(L["result"], self:TimeSeparate(avg.sum), avg.cnt, Arithmean))
 	end
 	avg.pre = cur
 	avg.cnt = avg.cnt + 1
@@ -125,8 +124,8 @@ function SpellQueueTest:TimeSeparate(time)
 	return str
 end
 
-function SpellQueueTest:isRunning()
-	return self.run
+function SpellQueueTest:IsRunning()
+	return self.StopButton:IsEnabled()
 end
 
 function SpellQueueTest:ValCompare(a, b)

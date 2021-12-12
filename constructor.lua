@@ -82,7 +82,6 @@ SpellQueueTest.EditBox:EnableMouse(true)
 SpellQueueTest.EditBox:SetSize(70, 14)
 SpellQueueTest.EditBox:SetFontObject(GameFontHighlightSmall)
 SpellQueueTest.EditBox:SetJustifyH("Center")
-SpellQueueTest:BarEnable(false)
 
 SpellQueueTest.ResultStr = SpellQueueTest.StopButton:CreateFontString(SpellQueueTest.StopButton, "OVERLAY")--, "GameTooltipText")
 SpellQueueTest.ResultStr:SetPoint("BOTTOM", SpellQueueTest.StopButton, "TOP", 0, 65)
