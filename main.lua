@@ -90,8 +90,6 @@ end)
 SpellQueueTest.InitEvent:SetScript("OnEvent", function(_, event, arg)
 	if event == "ADDON_LOADED" and arg == "SpellQueueTest" then
 		cfg = SpellQueueTest:ValCompare(SpellQueueTest.Settings, _G["SpellQueueTestSettings"])
-		if not cfg.cleanexit then SpellQueueTest:SQTprint("Abnormal termination") end
-		cfg.cleanexit = false
 		SpellQueueTest.AutoCheck:SetChecked(cfg.Autorun)
 		SpellQueueTest.AllSpell:SetChecked(cfg.AllSpell)
 		if cfg.Autorun then
@@ -104,8 +102,6 @@ SpellQueueTest.InitEvent:SetScript("OnEvent", function(_, event, arg)
 	elseif event == "PLAYER_LOGIN" then
 		SpellQueueTest.SlideBar:SetValue(GetCVar("SpellQueueWindow"))
 		SpellQueueTest.EditBox:SetText(GetCVar("SpellQueueWindow"))
-	elseif event == "PLAYER_LOGOUT" then
-		cfg.cleanexit = true
 	end
 end)
 
