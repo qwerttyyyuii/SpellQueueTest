@@ -113,20 +113,14 @@ end
 function SpellQueueTest:TimeSeparate(time)
 	local sec, min = 60, 60 * 60
 	local str
-	local function Second(val) return val % sec end
-	local function Minute(val) return val / sec end
-	local function Hour(val) return val / min end
 
-	if sec > time and 0 <= time then
+	if sec > time and time >= 0 then
 		str = string.format("%.1f"..L["second"], time)
-	elseif min > time and sec <= time then
-		str = string.format("%02d:%02d", Minute(time), Second(time))
-	elseif min <= time then
+	elseif min > time and time >= sec then
+		str = string.format("%02d:%02d", time / sec, time % sec)
+	elseif time >= min then
 		local hr = time % min
-		local mr = hr % sec
-		str = string.format("%d:%02d:%02d", Hour(time), Minute(hr), Second(mr))
-	else
-		str = string.format("ERROR")
+		str = string.format("%d:%02d:%02d", time / min, hr / sec, (hr % sec) % sec)
 	end
 	return str
 end

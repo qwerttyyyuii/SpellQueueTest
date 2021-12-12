@@ -135,7 +135,5 @@ SpellQueueTest.AllSpell.tooltip = L["AllSpell Desc"]
 SpellQueueTest.EventFrame = CreateFrame("Frame")
 SpellQueueTest.CombatFrame = CreateFrame("Frame")
 SpellQueueTest.InitEvent = CreateFrame("Frame")
-SpellQueueTest.InitEvent:RegisterEvent("PLAYER_LOGIN")
-SpellQueueTest.InitEvent:RegisterEvent("PLAYER_LOGOUT")
 SpellQueueTest.InitEvent:RegisterEvent("ADDON_LOADED")
-
+SpellQueueTest.InitEvent:RegisterEvent("PLAYER_LOGIN")
