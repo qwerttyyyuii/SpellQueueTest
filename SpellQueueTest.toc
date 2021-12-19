@@ -1,7 +1,7 @@
 ## Interface: 90105
 ## Title: SpellQueueTest
 ## Author: Leming
-## Version: 90105.2
+## Version: 90105.3
 ## Notes: |c00008000SpellQueueTest|r
 ## SavedVariables: SpellQueueTestSettings
 
