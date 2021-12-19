@@ -4,7 +4,7 @@ local const = SpellQueueTest.const
 local cfg = SpellQueueTest.cfg
 local L = SpellQueueTest.L
 local SetCVar, GetCVar = C_CVar.SetCVar, C_CVar.GetCVar
-local UnitName, GetSpellInfo = UnitName, GetSpellInfo
+local UnitName, GetSpellInfo, GetSpellBaseCooldown = UnitName, GetSpellInfo, GetSpellBaseCooldown
 local UIParent = UIParent
 local PGUID = UnitGUID("player")
 local INSTANT = 0
@@ -119,9 +119,13 @@ SpellQueueTest.EventFrame:SetScript("OnEvent", function(_, event)
 		if not destGUID then return end
 
 		if srcGUID == PGUID and (combatEvent == "SPELL_CAST_START" or combatEvent == "SPELL_CAST_SUCCESS") then
+			local _, gcdMS = GetSpellBaseCooldown(spellID)
+			if gcdMS == 0 then return end
+
 			if not cfg.AllSpell then
 				if spellID ~= 585 then return end
 			end
+
 
 			if select(4, GetSpellInfo(spellID)) == INSTANT then
 				if combatEvent == "SPELL_CAST_SUCCESS" then

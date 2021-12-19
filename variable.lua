@@ -19,6 +19,7 @@ SpellQueueTest.avg = {
 	sum = 0,
 	cnt = 0,
 	pre = 0,
+	refsum = 0,
 }
 SpellQueueTest.cfg = nil
 SpellQueueTest.Settings = {

@@ -3,11 +3,13 @@ local _, SpellQueueTest = ...
 local const = SpellQueueTest.const
 local L = SpellQueueTest.L
 local GetCVar, GetNetStats = C_CVar.GetCVar, GetNetStats
+local GetSpellCooldown = GetSpellCooldown
 
 function SpellQueueTest:resetvalue()
 	self.avg.cnt = 0
 	self.avg.sum = 0
 	self.avg.pre = 0
+	self.avg.refsum = 0
 end
 
 function SpellQueueTest:tointeger(x)
@@ -71,9 +73,7 @@ function SpellQueueTest:InitFrame()
 	self.ResultStr:SetText(L["wating"])
 end
 
-function SpellQueueTest:LogColor(val)
-	local refmargin = 0.020
-	local ref = 1.500 + refmargin
+local function LogColor(val, ref)
 	local str
 	local valstr = string.format("%.3f", val)
 	val = tonumber(valstr)
@@ -89,27 +89,7 @@ function SpellQueueTest:LogColor(val)
 	return str
 end
 
-function SpellQueueTest:CLEU(spellID, spellName)
-	local cur = debugprofilestop() / 1000
-	local avg = self.avg
-
-	if avg.cnt == 0 then
-		self:LogInsert(string.format(L["CVarSQW"].." %dms", GetCVar("SpellQueueWindow")))
-		self:LogInsert(string.format("Ping ["..L["User"].."]%dms ["..L["Server"].."]%dms", select(3, GetNetStats())))
-		self.ResultStr:SetText(L["Timebase"])
-	else
-		local dif = cur - avg.pre
-		avg.sum = avg.sum + dif
-		local Arithmean = self:LogColor(avg.sum / avg.cnt)
-		self:LogInsert(string.format("% 3d ["..L["dif"].."]%s"..L["second"].." ["..L["avg"].."]%s"..L["second"].." % 6d %s",
-									avg.cnt, self:LogColor(dif), Arithmean, spellID, spellName))
-		self.ResultStr:SetText(string.format(L["result"], self:TimeSeparate(avg.sum), avg.cnt, Arithmean))
-	end
-	avg.pre = cur
-	avg.cnt = avg.cnt + 1
-end
-
-function SpellQueueTest:TimeSeparate(time)
+local function toHMS(time)
 	local sec, min = 60, 60 * 60
 	local str
 
@@ -126,6 +106,28 @@ end
 
 function SpellQueueTest:IsRunning()
 	return self.StopButton:IsEnabled()
+end
+
+function SpellQueueTest:CLEU(spellID, spellName)
+	local cur = debugprofilestop() / 1000
+	local avg = self.avg
+
+	if avg.cnt == 0 then
+		self:LogInsert(string.format(L["CVarSQW"].." %dms", GetCVar("SpellQueueWindow")))
+		self:LogInsert(string.format("Ping ["..L["User"].."]%dms ["..L["Server"].."]%dms", select(3, GetNetStats())))
+		self.ResultStr:SetText(L["Timebase"])
+	else
+		local dif = cur - avg.pre
+		local ref = select(2, GetSpellCooldown(spellID))
+		avg.sum = avg.sum + dif
+		avg.refsum = avg.refsum + ref
+		local Arithmean = LogColor(avg.sum / avg.cnt, (avg.refsum / avg.cnt) + 0.020)
+		self:LogInsert(string.format("% 3d ["..L["dif"].."]%s"..L["second"].." ["..L["avg"].."]%s"..L["second"].." % 6d %s",
+				avg.cnt, LogColor(dif, ref), Arithmean, spellID, spellName))
+		self.ResultStr:SetText(string.format(L["result"], toHMS(avg.sum), avg.cnt, Arithmean))
+	end
+	avg.pre = cur
+	avg.cnt = avg.cnt + 1
 end
 
 function SpellQueueTest:ValCompare(a, b)

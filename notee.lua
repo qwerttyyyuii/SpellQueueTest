@@ -1,7 +1,7 @@
 local _, SpellQueueTest = ...
 
 local notebool = true
-if notebool then return end
+--if notebool then return end
 
 --1. savedvariables지우는 기능
 --2. cnt, 총경과시간 표시
@@ -92,3 +92,16 @@ end
 
 SpellQueueTest:ValCompare2(testsrc, testdst)
 --print(testdst.sixth.seventh)
+--startTime
+--number - The time when the cooldown started (as returned by GetTime()); zero if no cooldown; current time if (enabled == 0).
+--duration
+--number - Cooldown duration in seconds, 0 if spell is ready to be cast.
+--enabled
+--number - 0 if the spell is active (Stealth, Shadowmeld, Presence of Mind, etc) and the cooldown will begin as soon as the spell is used/cancelled; 1 otherwise.
+--modRate
+--number - The rate at which the cooldown widget's animation should be updated.
+--start, duration, enabled, modRate = GetSpellCooldown("spellName" or spellID or slotID, "bookType")
+--gettime, gcd
+--CooldownMS, gcdMS = GetSpellBaseCooldown(spellid)
+
+print(GetSpellCooldown(61304))
