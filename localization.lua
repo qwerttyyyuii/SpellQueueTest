@@ -30,6 +30,8 @@ L["wating"] = "Click the Enable to start\n A minimum of 20 tests is recommended.
 L["watingspell"] = "When you cast a spell, the test begins."
 L["Timebase"] = "Time-based generated"
 L["result"] = "Total %s Cast %d times\n Have an average GCD of %s"..L["second"]
+L["ESCRGT"] = "ESC Key"
+L["ESCRGT Desc"] = "To close with the ESC key"
 
 if locale == "koKR" then
 	L["Dummy"] = "허수아비"
@@ -58,6 +60,8 @@ if locale == "koKR" then
 	L["watingspell"] = "주문을 시전하면 테스트가 시작됩니다."
 	L["Timebase"] = "시간 기준 생성됨"
 	L["result"] = "%s 동안 %d회 시전하였고\n 평균 %s"..L["second"].."의 글로벌 쿨타임을 가짐"
+	L["ESCRGT"] = "ESC키"
+	L["ESCRGT Desc"] = "ESC키로 닫을 수 있게 하기"
 end
 
 SpellQueueTest.L = L

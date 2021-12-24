@@ -9,7 +9,6 @@ function SpellQueueTest:resetvalue()
 	self.avg.cnt = 0
 	self.avg.sum = 0
 	self.avg.pre = 0
-	self.avg.refsum = 0
 end
 
 function SpellQueueTest:tointeger(x)
@@ -74,9 +73,11 @@ function SpellQueueTest:InitFrame()
 end
 
 local function LogColor(val, ref)
-	local str
 	local valstr = string.format("%.3f", val)
+	if not ref then return valstr end
+	local str
 	val = tonumber(valstr)
+	ref = ref + SpellQueueTest.avg.margin
 	if val < ref then
 		str = "|cFF00FF00"..valstr.."|r" -- Green
 	elseif val == ref then
@@ -120,11 +121,11 @@ function SpellQueueTest:CLEU(spellID, spellName)
 		local dif = cur - avg.pre
 		local ref = select(2, GetSpellCooldown(spellID))
 		avg.sum = avg.sum + dif
-		avg.refsum = avg.refsum + ref
-		local Arithmean = LogColor(avg.sum / avg.cnt, (avg.refsum / avg.cnt) + 0.020)
-		self:LogInsert(string.format("% 3d ["..L["dif"].."]%s"..L["second"].." ["..L["avg"].."]%s"..L["second"].." % 6d %s",
-				avg.cnt, LogColor(dif, ref), Arithmean, spellID, spellName))
-		self.ResultStr:SetText(string.format(L["result"], toHMS(avg.sum), avg.cnt, Arithmean))
+		local arithmean = avg.sum / avg.cnt
+		local meanlog = LogColor(arithmean, false)
+		self:LogInsert(string.format("%3d ["..L["dif"].."]%s"..L["second"].." ["..L["avg"].."]%s"..L["second"].." %6d %s",
+									avg.cnt, LogColor(dif, ref), meanlog, spellID, spellName)) -- 레퍼런스를 따로 표시?
+		self.ResultStr:SetText(string.format(L["result"], toHMS(avg.sum), avg.cnt, meanlog))
 	end
 	avg.pre = cur
 	avg.cnt = avg.cnt + 1
