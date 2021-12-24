@@ -90,11 +90,13 @@ SpellQueueTest.InitEvent:SetScript("OnEvent", function(_, event, arg)
 		cfg = SpellQueueTest:ValCompare(SpellQueueTest.Settings, _G["SpellQueueTestSettings"])
 		SpellQueueTest.AutoCheck:SetChecked(cfg.Autorun)
 		SpellQueueTest.AllSpell:SetChecked(cfg.AllSpell)
+		SpellQueueTest.ESCRGT:SetChecked(cfg.ESCRGT)
 		SpellQueueTest:BarEnable(false)
 		if cfg.Autorun then
 			SpellQueueTest.EventFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
-		else
-			SpellQueueTest.EventFrame:UnregisterEvent("PLAYER_TARGET_CHANGED")
+		end
+		if cfg.ESCRGT then
+			table.insert(UISpecialFrames, SpellQueueTest.DragButton:GetName()) -- ESC key register
 		end
 		--SpellQueueTest.CombatFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
 		--SpellQueueTest.CombatFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -120,12 +122,11 @@ SpellQueueTest.EventFrame:SetScript("OnEvent", function(_, event)
 
 		if srcGUID == PGUID and (combatEvent == "SPELL_CAST_START" or combatEvent == "SPELL_CAST_SUCCESS") then
 			local _, gcdMS = GetSpellBaseCooldown(spellID)
-			if gcdMS == 0 then return end
+			if gcdMS == INSTANT then return end
 
 			if not cfg.AllSpell then
 				if spellID ~= 585 then return end
 			end
-
 
 			if select(4, GetSpellInfo(spellID)) == INSTANT then
 				if combatEvent == "SPELL_CAST_SUCCESS" then
@@ -186,6 +187,21 @@ SpellQueueTest.AllSpell:SetScript("OnClick", function(self)
 		cfg.AllSpell = true
 	else
 		cfg.AllSpell = false
+	end
+end)
+
+SpellQueueTest.ESCRGT:SetScript("OnClick", function(self)
+	if self:GetChecked() then
+		cfg.ESCRGT = true
+		table.insert(UISpecialFrames, SpellQueueTest.DragButton:GetName()) -- ESC key register
+	else
+		cfg.ESCRGT = false
+		for k, v in pairs(UISpecialFrames) do
+			if SpellQueueTest.DragButton:GetName() == v then
+				table.remove(UISpecialFrames, k)
+				break
+			end
+		end
 	end
 end)
 

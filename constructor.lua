@@ -29,7 +29,6 @@ SpellQueueTest.DragButton:SetScript("OnMouseUp", function(self, button)
 		self.isMoving = false
 	end
 end)
-table.insert(UISpecialFrames, SpellQueueTest.DragButton:GetName()) -- ESC key register
 
 SpellQueueTest.StopButton = CreateFrame("Button", nil, SpellQueueTest.DragButton, "UIPanelButtonTemplate")
 SpellQueueTest.StopButton:SetPoint("CENTER", SpellQueueTest.DragButton, "CENTER", 0, -const.height - 10)
@@ -130,6 +129,13 @@ SpellQueueTest.AllSpell:SetPoint("TOP", SpellQueueTest.AutoCheck, "BOTTOM", 0, 5
 _G[SpellQueueTest.AllSpell:GetName().."Text"]:SetPoint("LEFT", SpellQueueTest.AllSpell, "RIGHT", 0, 0)
 _G[SpellQueueTest.AllSpell:GetName().."Text"]:SetText(L["AllSpell"])
 SpellQueueTest.AllSpell.tooltip = L["AllSpell Desc"]
+
+SpellQueueTest.ESCRGT = CreateFrame("CheckButton", "SpellQueueTestESCRGT", SpellQueueTest.DragButton, "ChatConfigCheckButtonTemplate")
+SpellQueueTest.ESCRGT:SetSize(25, 25)
+SpellQueueTest.ESCRGT:SetPoint("TOP", SpellQueueTest.AllSpell, "BOTTOM", 0, 5)
+_G[SpellQueueTest.ESCRGT:GetName().."Text"]:SetPoint("LEFT", SpellQueueTest.ESCRGT, "RIGHT", 0, 0)
+_G[SpellQueueTest.ESCRGT:GetName().."Text"]:SetText(L["ESCRGT"])
+SpellQueueTest.ESCRGT.tooltip = L["ESCRGT Desc"]
 
 SpellQueueTest.EventFrame = CreateFrame("Frame")
 SpellQueueTest.CombatFrame = CreateFrame("Frame")
