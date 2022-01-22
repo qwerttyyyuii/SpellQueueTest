@@ -32,6 +32,8 @@ L["Timebase"] = "Time-based generated"
 L["result"] = "Total %s Cast %d times\n Have an average GCD of %s"..L["second"]
 L["ESCRGT"] = "ESC Key"
 L["ESCRGT Desc"] = "To close with the ESC key"
+L["Combat"] = "Combat Lock"
+L["Combat Desc"] = "Locked so that it cannot be modified during combat"
 
 if locale == "koKR" then
 	L["Dummy"] = "허수아비"
@@ -62,6 +64,8 @@ if locale == "koKR" then
 	L["result"] = "%s 동안 %d회 시전하였고\n 평균 %s"..L["second"].."의 글로벌 쿨타임을 가짐"
 	L["ESCRGT"] = "ESC키"
 	L["ESCRGT Desc"] = "ESC키로 닫을 수 있게 하기"
+	L["Combat"] = "전투중 잠금"
+	L["Combat Desc"] = "전투중 수정 불가능하게 잠금"
 end
 
 SpellQueueTest.L = L

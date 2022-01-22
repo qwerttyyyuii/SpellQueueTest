@@ -26,4 +26,5 @@ SpellQueueTest.Settings = {
 	Autorun = true,
 	AllSpell = true,
 	ESCRGT = false,
+	Combat = false,
 }

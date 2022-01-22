@@ -137,6 +137,13 @@ _G[SpellQueueTest.ESCRGT:GetName().."Text"]:SetPoint("LEFT", SpellQueueTest.ESCR
 _G[SpellQueueTest.ESCRGT:GetName().."Text"]:SetText(L["ESCRGT"])
 SpellQueueTest.ESCRGT.tooltip = L["ESCRGT Desc"]
 
+SpellQueueTest.Combat = CreateFrame("CheckButton", "SpellQueueTestCombat", SpellQueueTest.DragButton, "ChatConfigCheckButtonTemplate")
+SpellQueueTest.Combat:SetSize(25, 25)
+SpellQueueTest.Combat:SetPoint("TOPLEFT", SpellQueueTest.command, "TOPLEFT", 0, -39)
+_G[SpellQueueTest.Combat:GetName().."Text"]:SetPoint("LEFT", SpellQueueTest.Combat, "RIGHT", 0, 0)
+_G[SpellQueueTest.Combat:GetName().."Text"]:SetText(L["Combat"])
+SpellQueueTest.Combat.tooltip = L["Combat Desc"]
+
 SpellQueueTest.EventFrame = CreateFrame("Frame")
 SpellQueueTest.CombatFrame = CreateFrame("Frame")
 SpellQueueTest.InitEvent = CreateFrame("Frame")
