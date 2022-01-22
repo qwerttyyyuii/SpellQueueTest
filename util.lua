@@ -54,12 +54,15 @@ end
 function SpellQueueTest:CheckEnable(isEnable)
 	local val = 0.5
 	self.AllSpell:Disable()
+	self.Combat:Disable()
 
 	if isEnable then
 		val = 1
 		self.AllSpell:Enable()
+		self.Combat:Enable()
 	end
 	_G[self.AllSpell:GetName().."Text"]:SetVertexColor(1, 1, 1, val)
+	_G[self.Combat:GetName().."Text"]:SetVertexColor(1, 1, 1, val)
 end
 
 function SpellQueueTest:InitFrame()
@@ -121,8 +124,7 @@ function SpellQueueTest:CLEU(spellID, spellName)
 		local dif = cur - avg.pre
 		local ref = select(2, GetSpellCooldown(spellID))
 		avg.sum = avg.sum + dif
-		local arithmean = avg.sum / avg.cnt
-		local meanlog = LogColor(arithmean, false)
+		local meanlog = LogColor(avg.sum / avg.cnt)
 		self:LogInsert(string.format("%3d ["..L["dif"].."]%s"..L["second"].." ["..L["avg"].."]%s"..L["second"].." %6d %s",
 									avg.cnt, LogColor(dif, ref), meanlog, spellID, spellName)) -- 레퍼런스를 따로 표시?
 		self.ResultStr:SetText(string.format(L["result"], toHMS(avg.sum), avg.cnt, meanlog))
