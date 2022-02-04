@@ -237,3 +237,4 @@ function SlashCmdList.SpellQueueTest(msg)
 		SpellQueueTest:SQTprint("/sqt pos ("..L["RstPos"]..")")
 	end
 end
+
